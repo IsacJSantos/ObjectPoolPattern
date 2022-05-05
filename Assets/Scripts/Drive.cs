@@ -5,7 +5,6 @@ using UnityEngine;
 public class Drive : MonoBehaviour
 {
     public float speed = 10.0f;
-    public GameObject bullet;
 
     void Update()
     {
@@ -15,7 +14,12 @@ public class Drive : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Instantiate(bullet, transform.position, Quaternion.identity);
+            GameObject b = Pool.singleton.Get("bullet");
+            if (b != null)
+            {
+                b.transform.position = transform.position;
+                b.SetActive(true);
+            }
         }
     }
 }
