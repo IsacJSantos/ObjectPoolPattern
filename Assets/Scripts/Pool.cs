@@ -1,12 +1,13 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [System.Serializable]
 public class PoolItem
 {
     public GameObject prefab;
     public int amount;
+    public bool Expandable;
 }
 public class Pool : MonoBehaviour
 {
@@ -25,12 +26,7 @@ public class Pool : MonoBehaviour
         pooledItems = new List<GameObject>();
         foreach (PoolItem item in items)
         {
-            for (int i = 0; i < item.amount; i++)
-            {
-                GameObject obj = Instantiate(item.prefab);
-                obj.SetActive(false);
-                pooledItems.Add(obj);
-            }
+            AddToPool(item.prefab, item.amount);
         }
     }
 
@@ -40,8 +36,29 @@ public class Pool : MonoBehaviour
         {
             if (!pooledItems[i].activeInHierarchy && pooledItems[i].tag == tag)
                 return pooledItems[i];
-           
+
         }
+
+        PoolItem item = items.FirstOrDefault(i =>
+        {
+            if (i.prefab.tag == tag && i.Expandable) 
+            {
+                AddToPool(i.prefab, 1);
+                return i.prefab;
+            }
+            return false;
+        });
+
         return null;
+    }
+
+    void AddToPool(GameObject prefab, int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            GameObject obj = Instantiate(prefab);
+            obj.SetActive(false);
+            pooledItems.Add(obj);
+        }
     }
 }

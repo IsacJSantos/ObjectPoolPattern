@@ -6,7 +6,7 @@ public class Spawn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Random.Range(0, 100) < 5)
+        if (Random.Range(0, 100) < 3)
         {
             GameObject b = Pool.singleton.Get("asteroid");
             if (b != null)
